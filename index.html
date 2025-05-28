@@ -1793,5 +1793,45 @@
       popupSelectedDate = null;
     }
 
-    function gerarIdUnico() {
-      return Date
+        function gerarIdUnico() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // Carrega dados iniciais
+    function carregarDadosIniciais() {
+      // Preenche o seletor de professores
+      database.ref('professores').once('value', (snapshot) => {
+        const professoresSelect = document.getElementById('professor');
+        professoresSelect.innerHTML = '<option value="">Selecione</option>';
+        
+        snapshot.forEach((childSnapshot) => {
+          const professor = childSnapshot.val();
+          const option = document.createElement('option');
+          option.value = childSnapshot.key;
+          option.textContent = professor.nome;
+          professoresSelect.appendChild(option);
+        });
+      });
+      
+      // Inicializa os seletores de mês/ano
+      populateMonthYearSelectors();
+      
+      // Inicializa o datepicker
+      initDatepicker();
+      
+      // Renderiza o calendário inicial
+      const now = new Date();
+      renderCalendarBody(now.getFullYear(), now.getMonth());
+      
+      // Adiciona eventos aos seletores de mês/ano
+      monthSelect.addEventListener('change', () => {
+        renderCalendarBody(parseInt(yearSelect.value), parseInt(monthSelect.value);
+      });
+      
+      yearSelect.addEventListener('change', () => {
+        renderCalendarBody(parseInt(yearSelect.value), parseInt(monthSelect.value);
+      });
+    }
+  </script>
+</body>
+</html>
